@@ -1,0 +1,18 @@
+package hello.core.web;
+
+import hello.core.common.MyLogger;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class logDemService {
+
+    private final MyLogger myLogger;
+    public void logic(String id) {
+        myLogger.log("Service id = " + id);
+
+    }
+}
