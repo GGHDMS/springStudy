@@ -1,4 +1,4 @@
-package hellojpa;
+package jpabook.jpashop;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -15,21 +15,7 @@ public class JpaMain {
         tx.begin();
 
         try{
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
 
-            Member member = new Member();
-            member.setTeam(team);
-            member.setUsername("memberA");
-
-            em.persist(member);
-
-            Member findMember = em.find(Member.class, member.getId());
-            Team findTeam = findMember.getTeam();
-
-            System.out.println("findTeam = " + findTeam.getName());
-            tx.commit();
         } catch (Exception e){
             tx.rollback();
         } finally {
