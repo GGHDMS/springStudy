@@ -1,8 +1,6 @@
 package hellojpa;
 
-import javax.naming.Name;
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Member {
@@ -31,8 +29,9 @@ public class Member {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void changeTeam(Team team) {
         this.team = team;
+        team.getMembers().add(this);
     }
 
     public String getUsername() {
