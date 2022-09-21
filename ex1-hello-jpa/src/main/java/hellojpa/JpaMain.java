@@ -16,31 +16,19 @@ public class JpaMain {
         tx.begin();
 
         try{
-
-            Team team = new Team();
-            team.setName("teamA");
-            em.persist(team);
-
-            Member member = new Member();
-            member.changeTeam(team);
-            member.setUsername("memberA");
-            em.persist(member);
-
-            /**
-             *  Member 위에 code 사용
-             */
-            //team.getMembers().add(member); //해줘야함 jpa에서는 상관없지마 순수 객체에서 상관 있음
-
+            Movie movie = new Movie();
+            movie.setDirector("AAA");
+            movie.setActor("BBB");
+            movie.setName("바람과함께 사라지다");
+            movie.setPrice(10000);
+            em.persist(movie);
 
             em.flush();
             em.clear();
 
-            Team findTeam = em.find(Team.class, team.getId());
-            List<Member> members = findTeam.getMembers();
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());
-            }
 
+            Movie findMovies = em.find(Movie.class, movie.getId());
+            System.out.println("findMovies = " + findMovies);
             tx.commit();
         } catch (Exception e){
             tx.rollback();
