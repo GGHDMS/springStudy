@@ -1,5 +1,8 @@
 package hellojpa;
 
+import org.hibernate.Hibernate;
+import org.hibernate.MappingException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -16,19 +19,13 @@ public class JpaMain {
         tx.begin();
 
         try{
-            Movie movie = new Movie();
-            movie.setDirector("AAA");
-            movie.setActor("BBB");
-            movie.setName("바람과함께 사라지다");
-            movie.setPrice(10000);
-            em.persist(movie);
 
-            em.flush();
-            em.clear();
+            Member member = new Member();
+            member.setUsername("hello");
+            member.setHomeAddress(new Address("city", "street", "zipcode"));
+            member.setWorkPeriod(new Period());
 
-
-            Movie findMovies = em.find(Movie.class, movie.getId());
-            System.out.println("findMovies = " + findMovies);
+            em.persist(member);
             tx.commit();
         } catch (Exception e){
             tx.rollback();
@@ -36,6 +33,5 @@ public class JpaMain {
             em.close();
         }
         emf.close();
-
     }
 }
