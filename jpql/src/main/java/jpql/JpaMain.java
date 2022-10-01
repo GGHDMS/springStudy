@@ -1,12 +1,9 @@
-package jpabook.jpashop;
+package jpql;
 
-import jpabook.jpashop.domain.Book;
-import jpabook.jpashop.domain.Member;
-import jpabook.jpashop.domain.Order;
-import jpabook.jpashop.domain.OrderItem;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 
 public class JpaMain {
@@ -18,7 +15,9 @@ public class JpaMain {
         tx.begin();
 
         try{
-           
+            Member member = new Member();
+            member.setUsername("member1");
+            em.persist(member);
 
             tx.commit();
         } catch (Exception e){
@@ -27,6 +26,5 @@ public class JpaMain {
             em.close();
         }
         emf.close();
-
     }
 }
