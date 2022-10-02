@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import java.util.List;
 
 
+
 public class JpaMain {
     public static void main(String[] args) {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello");
@@ -27,16 +28,22 @@ public class JpaMain {
                 member.setUsername("teamA");
                 member.setAge(10);
                 member.changeTeam(team);
-
+                member.setType(MemberType.ADMIN);
                 em.persist(member);
 
             em.flush();
             em.clear();
-            String query = "select m from Member m, Team t where m.username = t.name";
-            List<Member> result = em.createQuery(query, Member.class)
+            String query = "select m, 'HELLLO', TRUE from Member m " +
+                    "where m.type = :userType";
+            List<Object[]> result = em.createQuery(query)
+                    .setParameter("userType", MemberType.ADMIN)
                     .getResultList();
 
-            System.out.println("result.size() = " + result.size());
+            for (Object[] objects : result) {
+                System.out.println("objects[0] = " + objects[0]);
+                System.out.println("objects[0] = " + objects[1]);
+                System.out.println("objects[0] = " + objects[2]);
+            }
 
             tx.commit();
         } catch (Exception e){
