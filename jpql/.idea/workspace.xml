@@ -5,8 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="637207ab-7d14-49fa-a6f9-e7bc861574fb" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/dialect/MyH2Dialect.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/jpql/JpaMain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/jpql/JpaMain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/META-INF/persistence.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/jpql/JpaMain.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/jpql/JpaMain.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +19,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -98,7 +101,7 @@
       <option name="presentableId" value="Default" />
       <updated>1664622263426</updated>
       <workItem from="1664622264673" duration="7841000" />
-      <workItem from="1664847078098" duration="3113000" />
+      <workItem from="1664847078098" duration="4161000" />
     </task>
     <servers />
   </component>
