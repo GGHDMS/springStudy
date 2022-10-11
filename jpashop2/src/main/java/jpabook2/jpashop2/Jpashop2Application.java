@@ -7,12 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Jpashop2Application {
 
     public static void main(String[] args) {
-
-        Hello hello = new Hello();
-        hello.setName("adfadf");
-        System.out.println("hello = " + hello.getName());
-
-
         SpringApplication.run(Jpashop2Application.class, args);
     }
 
