@@ -18,13 +18,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-class MemberServiceTest {
+public class MemberServiceTest {
 
     @Autowired MemberRepository memberRepository;
     @Autowired MemberService memberService;
     @Autowired EntityManager em;
 
-    @Test()
+    @Test
     //@Rollback(false)
     public void 회원가입() throws Exception{
         //given
@@ -38,7 +38,7 @@ class MemberServiceTest {
         assertEquals(member, memberRepository.findOne(saveId));
     }
 
-    @Test()
+    @Test
     public void 중복_회원_예외() throws Exception{
         //given
         Member member1 = new Member();
