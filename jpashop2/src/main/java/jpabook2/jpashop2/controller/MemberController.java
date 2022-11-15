@@ -4,6 +4,7 @@ import jpabook2.jpashop2.domain.Address;
 import jpabook2.jpashop2.domain.Member;
 import jpabook2.jpashop2.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.crypto.interfaces.PBEKey;
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,6 +40,13 @@ public class MemberController {
 
         memberService.join(member);
         return  "redirect:/";
+    }
+
+    @GetMapping("/members")
+    public String list(Model model){
+        List<Member> members = memberService.findMembers(); //api를 만들때는 entity로 반환하면 절대로 안된다.
+        model.addAttribute("members", members);
+        return "members/memberList";
     }
 
 }
