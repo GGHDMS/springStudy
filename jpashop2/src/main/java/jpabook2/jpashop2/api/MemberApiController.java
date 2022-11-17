@@ -5,16 +5,57 @@ import jpabook2.jpashop2.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController //  = @Controller + @ResponseBody
 @RequiredArgsConstructor
 public class MemberApiController {
     private final MemberService memberService;
+
+    @GetMapping("/api/v1/members")
+    public List<Member> membersV1() {
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result membersV2() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = findMembers.stream()
+                .map(m -> new MemberDto(m.getName()))
+                .collect(Collectors.toList());
+
+        return new Result(collect.size(), collect);
+    }
+
+    @GetMapping("/api/v2/membersFor") // 내가 만듦 ㅋㅋ
+    public Result membersV2For() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = new ArrayList<>();
+        for (Member findMember : findMembers) {
+            MemberDto memberDto = new MemberDto(findMember.getName());
+            collect.add(memberDto);
+        }
+        return new Result(collect.size(), collect);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto{
+        private String name;
+    }
+
 
     @PostMapping("/api/v1/members")
     public createMemberResponse saveMemberV1(@RequestBody @Valid Member member){ // @RequestBody json(다른것도)으로 온것을 member로 바꿔준다.
@@ -52,13 +93,10 @@ public class MemberApiController {
         private String name;
     }
 
-
-
     @Data
     static class CreateMemberRequest {
         private String name;
     }
-
 
     @Data
     static class createMemberResponse{
