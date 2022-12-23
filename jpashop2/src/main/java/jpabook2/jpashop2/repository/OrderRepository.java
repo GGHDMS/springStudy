@@ -94,6 +94,15 @@ public class OrderRepository {
         ).getResultList();
     }
 
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class) //페이징 하면 안된다. order 가 뻥튀기 되서 우리가 생각하는 거랑 달라짐 메모리에서 처리해줌 그래서 메모리 터짐
+                .getResultList();
+    }
 
 
 //    public List<Order> findAll(OrderSearch orderSearch){

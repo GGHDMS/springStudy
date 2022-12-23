@@ -41,7 +41,20 @@ public class OrderApiController {
         return result;
     }
 
-    @Data
+
+    @GetMapping("/api/v3/orders")
+    public List<OrderDto> orderV3(){
+        List<Order> orders = orderRepository.findAllWithItem();
+        List<OrderDto> result = orders.stream()
+                .map(o -> new OrderDto(o))
+                .collect(Collectors.toList());
+
+        return result;
+    }
+
+
+
+        @Data
     static class OrderDto {
         private Long orderId;
         private String name;
@@ -59,6 +72,7 @@ public class OrderApiController {
                     .collect(Collectors.toList());
         }
     }
+
     @Data
     static class OrderItemDto {
         private String itemName; // 상품명
