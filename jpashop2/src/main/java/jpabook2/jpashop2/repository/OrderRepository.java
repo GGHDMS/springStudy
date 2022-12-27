@@ -4,6 +4,7 @@ import jpabook2.jpashop2.domain.Member;
 import jpabook2.jpashop2.domain.Order;
 import jpabook2.jpashop2.repository.Order.simplequery.OrderSimpleQueryDto;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
@@ -85,6 +86,11 @@ public class OrderRepository {
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
     }
+
+//    public List<Order> findAll(OrderSearch orderSearch){
+//
+//    }
+
 
     public List<Order> findAllWithMemberDelivery() {
         return em.createQuery(

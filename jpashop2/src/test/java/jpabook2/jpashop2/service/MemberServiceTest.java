@@ -20,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class MemberServiceTest {
 
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepository memberRepository;
     @Autowired MemberService memberService;
     @Autowired EntityManager em;
 
@@ -35,7 +36,7 @@ public class MemberServiceTest {
         Long saveId = memberService.join(member);
         //then
         em.flush();
-        assertEquals(member, memberRepository.findOne(saveId));
+        assertEquals(member, memberRepository.findById(saveId).get());
     }
 
     @Test
