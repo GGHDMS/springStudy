@@ -13,6 +13,7 @@ import study.datajpa.entity.Team;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -149,5 +150,24 @@ class MemberRepositoryTest {
         for (Member member : result) {
             System.out.println("member = " + member);
         }
+    }
+
+    @Test
+    public void returnType() throws Exception{
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> aaa = memberRepository.findListByUsername("AAA");
+        System.out.println("aaa = " + aaa);
+        Member aaa1 = memberRepository.findMemberByUsername("AAA");
+        System.out.println("aaa1 = " + aaa1);
+        Member adfadfs = memberRepository.findMemberByUsername("ADFADFS");
+        System.out.println("adfadfs = " + adfadfs);
+        Optional<Member> aaa2 = memberRepository.findOptionalByUsername("AAA"); // AAA 2개 이상 error
+        System.out.println("aaa2 = " + aaa2.get());
+        Optional<Member> adfadf = memberRepository.findOptionalByUsername("adfadf");
+        System.out.println("adfadf = " + adfadf);
     }
 }
