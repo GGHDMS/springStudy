@@ -77,4 +77,17 @@ class MemberRepositoryTest {
         assertThat(result.size()).isEqualTo(1);
     }
 
+    @Test
+    public void findByUsername() throws Exception{
+        //given
+        Member member1 = new Member("member1");
+        Member member2 = new Member("member2");
+        memberRepository.save(member1);
+        memberRepository.save(member2);
+
+        List<Member> members = memberRepository.findByUsername("member1");
+
+        assertThat(members.size()).isEqualTo(1);
+    }
+
 }
