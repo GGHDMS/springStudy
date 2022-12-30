@@ -3,6 +3,7 @@ package study.datajpa.repository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -269,6 +270,33 @@ class MemberRepositoryTest {
             System.out.println("member = " + member.getUsername());
             System.out.println("member.team = " + member.getTeam().getName());
         }
+   }
+
+   @Test
+   public void QueryHint() throws Exception{
+       //given
+       Member member1 = new Member("member1", 10);
+       memberRepository.save(member1);
+       em.flush();
+       em.clear();
+       //when
+
+       //Member findMember = memberRepository.findById(member1.getId()).get(); // 메모리를 2개 먹는거 비효율적 비용
+       Member findMember = memberRepository.findReadOnlyByUsername("member1");
+       findMember.setUsername("member2");
+       //then
+
+   }
+
+    @Test
+    public void lock() throws Exception{
+        //given
+        Member member1 = new Member("member1", 10);
+        memberRepository.save(member1);
+        em.flush();
+        em.clear();
+        //when
+        List<Member> result = memberRepository.findLockByUsername("member1");
 
     }
 }
