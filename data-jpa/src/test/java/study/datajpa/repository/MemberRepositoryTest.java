@@ -13,6 +13,8 @@ import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
@@ -28,6 +30,8 @@ class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;
     @Autowired TeamRepository teamRepository;
+    @PersistenceContext
+    EntityManager em;
     
     @Test
     public void testMember() throws Exception{
@@ -215,5 +219,27 @@ class MemberRepositoryTest {
         assertThat(page.getTotalPages()).isEqualTo(2);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
+    }
+
+    @Test
+    public void bulkUpdate() throws Exception{
+        //given
+        memberRepository.save(new Member("member1", 10));
+        memberRepository.save(new Member("member2", 19));
+        memberRepository.save(new Member("member3", 20));
+        memberRepository.save(new Member("member4", 21));
+        memberRepository.save(new Member("member5", 40));
+        //when
+
+        int resultCount = memberRepository.bulkAgePlus(20); //bulk 후에는 영속성 contents 날려야함 // @Modifying에 추가 기능 있음
+//        em.flush();
+//        em.clear();
+        //then
+
+        List<Member> result = memberRepository.findByUsername("member5");
+        Member member = result.get(0);
+        System.out.println("member = " + member);
+
+        assertThat(resultCount).isEqualTo(3);
     }
 }
