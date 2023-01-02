@@ -23,6 +23,7 @@ public class TeamJpaRepository {
         em.remove(team);
     }
 
+
     public List<Team> findAll(){
         return em.createQuery("select t from Team t", Team.class)
                 .getResultList();
