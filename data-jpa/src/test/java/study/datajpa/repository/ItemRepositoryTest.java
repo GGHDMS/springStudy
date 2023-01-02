@@ -16,5 +16,4 @@ class ItemRepositoryTest {
     public void save() throws Exception{
         itemRepository.save(new Item("aa"));
     }
-
 }
