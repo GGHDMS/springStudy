@@ -14,6 +14,7 @@ import study.querydsl.entity.Team;
 import javax.crypto.interfaces.PBEKey;
 import javax.persistence.EntityManager;
 
+import static org.assertj.core.api.Assertions.*;
 import static study.querydsl.entity.QMember.*;
 
 @SpringBootTest
@@ -53,7 +54,7 @@ public class QuerydslBasicTest {
         //when
 
         //then
-        Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+        assertThat(findMember.getUsername()).isEqualTo("member1");
     }
 
     @Test
@@ -67,9 +68,38 @@ public class QuerydslBasicTest {
                 .where(member.username.eq("member1")) // 파라미터 바인딩 처리
                 .fetchOne();
         //when
-        Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+        assertThat(findMember.getUsername()).isEqualTo("member1");
 
         //then
+    }
+
+    @Test
+    public void search() throws Exception{
+        //when
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
+                        member.username.eq("member1").and(member.age.eq(10))
+                )
+                .fetchOne();
+
+        //then
+        assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
+
+    @Test
+    public void searchAndSearch() throws Exception{
+        //when
+        Member findMember = queryFactory
+                .selectFrom(member)
+                .where(
+                        member.username.eq("member1"),
+                        member.age.eq(10)  //and로 된다.
+                )
+                .fetchOne();
+
+        //then
+        assertThat(findMember.getUsername()).isEqualTo("member1");
     }
 }
 
