@@ -51,6 +51,7 @@ public class MemberService {
      * 전체 회원 조회
      */
     public List<Member> findMembers(){
+
 //        long start = System.currentTimeMillis();
 //
 //        try {
@@ -60,7 +61,6 @@ public class MemberService {
 //            long timeMs = finish - start;
 //            System.out.println("timeMs = " + timeMs + "ms");
 //        }
-
         return memberRepository.findAll();
     }
 
