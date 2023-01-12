@@ -1,0 +1,30 @@
+package hello.springmvc.basic;
+
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@Slf4j
+public class LogTestController {
+    //private final Logger log = LoggerFactory.getLogger(getClass()); @Slf4j
+
+    @RequestMapping("/log-test")
+    public String logTest(){
+        String name = "Spring";
+
+        System.out.println("name = " + name);
+
+        log.trace("trace log="+name); // 출력을 안해도 연산을 한다.
+
+        log.trace("trace log={}", name); // 출력 안하면 연산 안한다.
+        log.debug("debug log={}", name);
+        log.info(" info log={}", name);
+        log.warn(" warn log={}", name);
+        log.error("error log={}", name);
+
+        return "ok";
+    }
+}
