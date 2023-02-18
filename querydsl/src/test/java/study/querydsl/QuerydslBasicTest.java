@@ -1,5 +1,6 @@
 package study.querydsl;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,13 +19,13 @@ import static study.querydsl.entity.QMember.member;
 @Transactional
 @SpringBootTest
 public class QuerydslBasicTest {
-    
+
     @Autowired
     EntityManager em;
     JPAQueryFactory queryFactory;
 
     @BeforeEach
-    void beforeEach(){
+    void beforeEach() {
         queryFactory = new JPAQueryFactory(em);
         Team teamA = new Team("teamA");
         Team teamB = new Team("teamB");
@@ -41,9 +42,9 @@ public class QuerydslBasicTest {
         em.persist(member3);
         em.persist(member4);
     }
-    
+
     @Test
-    public void startJPQL() throws Exception{
+    public void startJPQL() throws Exception {
         //member1를 찾아라.
         String qlString = "select m from Member m where m.username = :username";
 
@@ -55,7 +56,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void startQuerydsl() throws Exception{
+    public void startQuerydsl() throws Exception {
         Member findMember = queryFactory
                 .select(member)
                 .from(member)
@@ -66,7 +67,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void search() throws Exception{
+    public void search() throws Exception {
         Member findMember = queryFactory
                 .selectFrom(member)
                 .where(member.username.eq("member1")
@@ -76,8 +77,9 @@ public class QuerydslBasicTest {
         assertThat(findMember.getUsername()).isEqualTo("member1");
 
     }
+
     @Test
-    public void searchAndParam() throws Exception{
+    public void searchAndParam() throws Exception {
         Member findMember = queryFactory
                 .selectFrom(member)
                 .where(
@@ -90,7 +92,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void resultFetch() throws Exception{
+    public void resultFetch() throws Exception {
         List<Member> fetch = queryFactory
                 .selectFrom(member)
                 .fetch();
@@ -116,7 +118,7 @@ public class QuerydslBasicTest {
      * 단 2에서 회원 이름이 없으면 마지막에 출력 (nulls last)
      */
     @Test
-    public void sort() throws Exception{
+    public void sort() throws Exception {
         em.persist(new Member(null, 100));
         em.persist(new Member("member5", 100));
         em.persist(new Member("member6", 100));
@@ -133,5 +135,32 @@ public class QuerydslBasicTest {
         assertThat(member5.getUsername()).isEqualTo("member5");
         assertThat(member6.getUsername()).isEqualTo("member6");
         assertThat(memberNUll.getUsername()).isNull();
+    }
+
+    @Test
+    public void paging1() throws Exception {
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetch();
+
+        assertThat(result).hasSize(2);
+    }
+
+    @Test
+    public void paging2() throws Exception {
+        QueryResults<Member> queryResults = queryFactory
+                .selectFrom(member)
+                .orderBy(member.username.desc())
+                .offset(1)
+                .limit(2)
+                .fetchResults();
+
+        assertThat(queryResults.getTotal()).isEqualTo(4);
+        assertThat(queryResults.getLimit()).isEqualTo(2);
+        assertThat(queryResults.getOffset()).isEqualTo(1);
+        assertThat(queryResults.getResults().size()).isEqualTo(4);
     }
 }
