@@ -12,6 +12,8 @@ import study.querydsl.entity.Team;
 
 import javax.persistence.EntityManager;
 
+import java.util.List;
+
 import static study.querydsl.entity.QMember.member;
 
 @Transactional
@@ -86,6 +88,25 @@ public class QuerydslBasicTest {
                 .fetchOne();
 
         Assertions.assertThat(findMember.getUsername()).isEqualTo("member1");
+    }
 
+    @Test
+    public void resultFetch() throws Exception{
+        List<Member> fetch = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        Member fetchOne = queryFactory
+                .selectFrom(member)
+                .fetchOne();
+
+        Member fetchFirst = queryFactory
+                .selectFrom(member)
+                .fetchFirst();
+
+        Long count = queryFactory
+                .selectFrom(member)
+                .select(member.count())
+                .fetchOne();
     }
 }
