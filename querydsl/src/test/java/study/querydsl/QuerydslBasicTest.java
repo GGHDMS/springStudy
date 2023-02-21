@@ -449,6 +449,34 @@ public class QuerydslBasicTest {
         System.out.println("result = " + result);
     }
 
+    @Test
+    public void simpleProjection() throws Exception{
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    public void tupleProjection() throws Exception{ // Tuple은 querydsl에 종속적 그러므로 repository 내에서만 사용하는 것이 좋다.
+        List<Tuple> result = queryFactory
+                .select(member.username, member.age)
+                .from(member)
+                .fetch();
+
+        for (Tuple tuple : result) {
+            String username = tuple.get(member.username);
+            Integer age = tuple.get(member.age);
+            System.out.println("username = " + username);
+            System.out.println("age = " + age);
+        }
+    }
+
+
 
 
 }
