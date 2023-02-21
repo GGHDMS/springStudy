@@ -167,7 +167,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void aggregation() throws Exception{
+    public void aggregation() throws Exception {
         List<Tuple> result = queryFactory
                 .select(
                         member.count(),
@@ -188,10 +188,10 @@ public class QuerydslBasicTest {
     }
 
     /**
-     *  팀의 이름과 각 팀의 평균 연령을 구해라.
+     * 팀의 이름과 각 팀의 평균 연령을 구해라.
      */
     @Test
-    public void group() throws Exception{
+    public void group() throws Exception {
         List<Tuple> result = queryFactory
                 .select(team.name, member.age.avg())
                 .from(member)
@@ -212,7 +212,7 @@ public class QuerydslBasicTest {
      * 팀 A에 소속된 모든 회원
      */
     @Test
-    public void join() throws Exception{
+    public void join() throws Exception {
         List<Member> result = queryFactory
                 .selectFrom(member)
                 .join(member.team, team)
@@ -227,11 +227,11 @@ public class QuerydslBasicTest {
      * 회원의 이름이 팀 이름과 같은 회원 조회
      */
     @Test
-    public void theta_join() throws Exception{
+    public void theta_join() throws Exception {
         em.persist(new Member("teamA"));
         em.persist(new Member("teamB"));
         em.persist(new Member("teamC"));
-        
+
         List<Member> result = queryFactory
                 .select(member)
                 .from(member, team)
@@ -240,6 +240,48 @@ public class QuerydslBasicTest {
 
         assertThat(result).extracting("username").contains("teamA", "teamB");
     }
+
+
+    /**
+     * 회원과 팀을 조인하면서, 팀 이름이 teamA인 팀만 조인, 회원은 모두 조회
+     * JPQL: select m, t from Member m left join m.team t on t.name = 'teamA'
+     */
+    @Test
+    public void join_on_filtering() throws Exception { //외부 조인일때만 on 사용 내부는 where 로 가능
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(member.team, team).on(team.name.eq("teamA"))
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+    }
+
+    /**
+     * 연관관계 없는 엔티티 외부 조인
+     * 회원의 이름이 팀 이름과 같은 회원 조회
+     */
+    @Test
+    public void join_on_no_relation() throws Exception {
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+        em.persist(new Member("teamC"));
+
+        List<Tuple> result = queryFactory
+                .select(member, team)
+                .from(member)
+                .leftJoin(team).on(member.username.eq(team.name)) //leftJoin 에 param 1개 일때 pk 비교를 안한다. on절 로만 비교
+                .fetch();
+
+        for (Tuple tuple : result) {
+            System.out.println("tuple = " + tuple);
+        }
+
+    }
+
+
 
 
 
