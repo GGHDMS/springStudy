@@ -696,4 +696,33 @@ public class QuerydslBasicTest {
         }
     }
 
+    @Test
+    public void sqlFunction() throws Exception{ //현재 H2dialect 에 등록되어 있는것만 사용 가능. 아닌거면 직접 등록해서 사용 해야 된다.
+        List<String> result = queryFactory
+                .select(
+                        Expressions.stringTemplate("function('replace', {0}, {1}, {2})", member.username, "member", "m")
+                ).from(member)
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    public void sqlFunction2() throws Exception{ // 소문자인 username 만 가져오기
+        List<String> result = queryFactory
+                .select(member.username)
+                .from(member)
+//                .where(member.username.eq(
+//                        Expressions.stringTemplate("function('lower', {0})", member.username)
+//                ))
+                .where(member.username.eq(member.username.lower()))
+                .fetch();
+
+        for (String s : result) {
+            System.out.println("s = " + s);
+        }
+    }
+
 }
