@@ -1,5 +1,6 @@
 package study.querydsl;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
@@ -296,7 +297,7 @@ public class QuerydslBasicTest {
     EntityManagerFactory emf;
 
     @Test
-    public void fetchJoinNo() throws Exception{
+    public void fetchJoinNo() throws Exception {
         em.flush();
         em.clear();
         Member findMember = queryFactory
@@ -311,7 +312,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void fetchJoinUse() throws Exception{
+    public void fetchJoinUse() throws Exception {
         em.flush();
         em.clear();
         Member findMember = queryFactory
@@ -328,7 +329,7 @@ public class QuerydslBasicTest {
      * 나이가 가장 많은 회원 조회
      */
     @Test
-    public void subQuery() throws Exception{
+    public void subQuery() throws Exception {
 
         QMember subMember = new QMember("subMember");
 
@@ -347,7 +348,7 @@ public class QuerydslBasicTest {
      * 나이가 평균 이상인 회원
      */
     @Test
-    public void subQueryGoe() throws Exception{
+    public void subQueryGoe() throws Exception {
 
         QMember subMember = new QMember("subMember");
 
@@ -366,7 +367,7 @@ public class QuerydslBasicTest {
      * 나이가 평균 이상인 회원
      */
     @Test
-    public void subQueryIn() throws Exception{
+    public void subQueryIn() throws Exception {
 
         QMember subMember = new QMember("subMember");
 
@@ -381,9 +382,9 @@ public class QuerydslBasicTest {
 
         assertThat(result).extracting("age").contains(20, 30, 40);
     }
-    
+
     @Test
-    public void selectSubQuery() throws Exception{
+    public void selectSubQuery() throws Exception {
 
         QMember subMember = new QMember("subMember");
 
@@ -401,7 +402,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void basicCase() throws Exception{
+    public void basicCase() throws Exception {
         List<String> result = queryFactory
                 .select(member.age
                         .when(10).then("열살")
@@ -416,7 +417,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void complexCase() throws Exception{
+    public void complexCase() throws Exception {
         List<String> result = queryFactory
                 .select(new CaseBuilder()
                         .when(member.age.between(0, 20)).then("0~20살")
@@ -431,7 +432,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void constant() throws Exception{
+    public void constant() throws Exception {
         List<Tuple> result = queryFactory
                 .select(member.username, Expressions.constant("A"))
                 .from(member)
@@ -444,7 +445,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void concat() throws Exception{
+    public void concat() throws Exception {
         //{username}_{age}
         String result = queryFactory
                 .select(member.username.concat("_").concat(member.age.stringValue()))
@@ -455,7 +456,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void simpleProjection() throws Exception{
+    public void simpleProjection() throws Exception {
         List<String> result = queryFactory
                 .select(member.username)
                 .from(member)
@@ -467,7 +468,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void tupleProjection() throws Exception{ // Tuple은 querydsl에 종속적 그러므로 repository 내에서만 사용하는 것이 좋다.
+    public void tupleProjection() throws Exception { // Tuple은 querydsl에 종속적 그러므로 repository 내에서만 사용하는 것이 좋다.
         List<Tuple> result = queryFactory
                 .select(member.username, member.age)
                 .from(member)
@@ -483,16 +484,16 @@ public class QuerydslBasicTest {
 
 
     @Test
-    public void findDtoByJPQL() throws Exception{ //DTO 를 이용해 원하는 필드값만 가져오기
+    public void findDtoByJPQL() throws Exception { //DTO 를 이용해 원하는 필드값만 가져오기
         List<MemberDto> result = em.createQuery("select new study.querydsl.dto.MemberDto(m.username, m.age) from Member m", MemberDto.class)
                 .getResultList();
         for (MemberDto memberDto : result) {
             System.out.println("memberDto = " + memberDto);
         }
     }
-    
+
     @Test
-    public void findDtoBySetter() throws Exception{ // DTO 의 getter setter 를 이용해 원하는 값 가져오기
+    public void findDtoBySetter() throws Exception { // DTO 의 getter setter 를 이용해 원하는 값 가져오기
         List<MemberDto> result = queryFactory
                 .select(Projections.bean( // bean 이 getter, setter 의미하는거래
                         MemberDto.class, member.username, member.age)
@@ -506,7 +507,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void findDtoByFields() throws Exception{ // DTO 의 fields 를 이용해 원하는 값 가져오기
+    public void findDtoByFields() throws Exception { // DTO 의 fields 를 이용해 원하는 값 가져오기
         List<MemberDto> result = queryFactory
                 .select(Projections.fields( // field에 직접 주입
                         MemberDto.class, member.username, member.age)
@@ -520,7 +521,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void findDtoByConstructor() throws Exception{ // DTO 의 생성자를 이용해 원하는 값 가져오기
+    public void findDtoByConstructor() throws Exception { // DTO 의 생성자를 이용해 원하는 값 가져오기
         List<MemberDto> result = queryFactory
                 .select(Projections.constructor( // 생성자 주입
                         MemberDto.class, member.username, member.age)
@@ -532,16 +533,17 @@ public class QuerydslBasicTest {
             System.out.println("memberDto = " + memberDto);
         }
     }
+
     @Test
-    public void findUserDto() throws Exception{ // UserDto(String name, int age)
+    public void findUserDto() throws Exception { // UserDto(String name, int age)
         QMember subMember = new QMember("subMember");
         List<UserDto> result = queryFactory
                 .select(Projections.fields(
-                        UserDto.class, member.username.as("name"),
+                                UserDto.class, member.username.as("name"),
 
-                        ExpressionUtils.as(
-                                select(subMember.age.max())
-                                        .from(subMember), "age")
+                                ExpressionUtils.as(
+                                        select(subMember.age.max())
+                                                .from(subMember), "age")
                         )
                 )
                 .from(member)
@@ -553,10 +555,10 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void findUserDtoConstructor() throws Exception{ // UserDto(String name, int age)
+    public void findUserDtoConstructor() throws Exception { // UserDto(String name, int age)
         List<UserDto> result = queryFactory
                 .select(Projections.constructor( //생성자는 타입 비교, dto 와 entity 의 이름이 달라고 괜찮다
-                        UserDto.class, member.username, member.age
+                                UserDto.class, member.username, member.age
                         )
                 )
                 .from(member)
@@ -568,7 +570,7 @@ public class QuerydslBasicTest {
     }
 
     @Test
-    public void findDtoByQueryProjection() throws Exception{ // Projections.constructor 는 member.id 추가시 runtime 오류 but QueryProjection 은 컴파일 오류, 단점 dto 가 querydsl 에 의존성을 가진다.
+    public void findDtoByQueryProjection() throws Exception { // Projections.constructor 는 member.id 추가시 runtime 오류 but QueryProjection 은 컴파일 오류, 단점 dto 가 querydsl 에 의존성을 가진다.
         List<MemberDto> result = queryFactory
                 .select(new QMemberDto(member.username, member.age))
                 .from(member)
@@ -579,6 +581,28 @@ public class QuerydslBasicTest {
         }
     }
 
+    @Test
+    public void dynamicQuery_BooleanBuilder() throws Exception {
+        String usernameParam = "member1";
+        Integer ageParam = 10;
+
+        List<Member> result = searchMember1(usernameParam, ageParam);
+        assertThat(result.size()).isEqualTo(1);
+    }
+
+    private List<Member> searchMember1(String usernameCond, Integer ageCond) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (usernameCond != null) {
+            builder.and(member.username.eq(usernameCond));
+        }
+        if (ageCond != null) {
+            builder.and(member.age.eq(ageCond));
+        }
+        return queryFactory
+                .selectFrom(member)
+                .where(builder)
+                .fetch();
+    }
 
 
 }
