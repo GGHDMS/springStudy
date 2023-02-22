@@ -635,6 +635,65 @@ public class QuerydslBasicTest {
         return usernameEq(usernameCond).and(ageEq(ageCond));
     }
 
-    
+    @Test
+    public void bulkUpdate() throws Exception { // 영속성 context 를 초기화 시켜줘야 한다 bulk 연산시
+        // member1 = 10 --> 비회원
+        // member2 = 20 --> 비회원
+
+        long count = queryFactory
+                .update(member)
+                .set(member.username, "비회원")
+                .where(member.age.lt(28))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        for (Member m : result) {
+            System.out.println("m = " + m);
+        }
+    }
+
+    @Test
+    public void bulkAdd() throws Exception {
+        queryFactory
+                .update(member)
+                .set(member.age, member.age.add(1)) // member.age.multiply(2)
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        for (Member m : result) {
+            System.out.println("m = " + m);
+        }
+    }
+
+    @Test
+    public void bulkDelete() throws Exception {
+        queryFactory
+                .delete(member)
+                .where(member.age.gt(19))
+                .execute();
+
+        em.flush();
+        em.clear();
+
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .fetch();
+
+        for (Member m : result) {
+            System.out.println("m = " + m);
+        }
+    }
 
 }
