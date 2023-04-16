@@ -5,6 +5,7 @@ import hello.jdbc.domain.Member;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.*;
+import java.util.NoSuchElementException;
 
 /**
  * JDBC - DriverManager 사용
@@ -33,6 +34,38 @@ public class MemberRepositoryV0 {
             close(con, pstmt, null);
         }
     }
+
+    public Member findById(String memberId) throws SQLException {
+        String sql = "select * from member where member_id = ?";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = getConnection();
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, memberId);
+
+            rs = pstmt.executeQuery();
+            if (rs.next()) { // rs.next 처음에는 데이터를 가르키고 있지 않다 이동 결과가 true 면 데이터가 있다.
+                Member member = new Member();
+                member.setMemberId(rs.getString("member_Id"));
+                member.setMoney(rs.getInt("money"));
+                return member;
+            } else {
+                throw new NoSuchElementException("member not found memberId=" + memberId);
+            }
+
+        } catch (SQLException e) {log.error("db error", e);
+            log.error("db error", e);
+            throw e;
+        } finally {
+            close(con, pstmt, rs); // 생성과 해지는 순서대로
+        }
+
+    }
+
 
     private void close(Connection con, Statement stmt, ResultSet rs) { // 외부 자원을 사용하는 것 이기 때문에 꼭 close 해야 한다.
 
