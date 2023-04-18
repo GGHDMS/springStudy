@@ -31,8 +31,8 @@ public class MemberRepositoryV3 {
         Connection con = null;
         PreparedStatement pstmt = null; // SQL Injection 공격을 예방하기 위해 무조건 사용, 사용안하면 sql 구문이 대입 될 수도 있다
 
-        con = getConnection();
         try {
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, member.getMemberId());
             pstmt.setInt(2, member.getMoney());
@@ -84,8 +84,8 @@ public class MemberRepositoryV3 {
         Connection con = null;
         PreparedStatement pstmt = null;
 
-        con = getConnection();
         try {
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, money);
             pstmt.setString(2, memberId);
@@ -107,8 +107,8 @@ public class MemberRepositoryV3 {
         Connection con = null;
         PreparedStatement pstmt = null;
 
-        con = getConnection();
         try {
+            con = getConnection();
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, memberId);
             int resultSize = pstmt.executeUpdate();
