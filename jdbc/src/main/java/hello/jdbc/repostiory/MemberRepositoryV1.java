@@ -58,7 +58,7 @@ public class MemberRepositoryV1 {
             rs = pstmt.executeQuery();
             if (rs.next()) { // rs.next 처음에는 데이터를 가르키고 있지 않다 이동 결과가 true 면 데이터가 있다.
                 Member member = new Member();
-                member.setMemberId(rs.getString("member_Id"));
+                member.setMemberId(rs.getString("member_id"));
                 member.setMoney(rs.getInt("money"));
                 return member;
             } else {
