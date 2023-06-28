@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class OderControllerV0 {
+public class OrderControllerV0 {
 
     private final OrderServiceV0 orderServiceV0;
 
@@ -16,3 +16,4 @@ public class OderControllerV0 {
         return "ok";
     }
 }
+
