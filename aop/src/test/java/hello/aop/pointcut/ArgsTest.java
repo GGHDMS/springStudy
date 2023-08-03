@@ -62,7 +62,6 @@ public class ArgsTest {
                 .matches(helloMethod, MemberServiceImpl.class)).isFalse();
         assertThat(pointcut("execution(* *(Object))")
                 .matches(helloMethod, MemberServiceImpl.class)).isFalse();
-
     }
 
 }
