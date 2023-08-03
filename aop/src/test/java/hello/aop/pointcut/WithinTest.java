@@ -51,5 +51,4 @@ public class WithinTest {
         pointcut.setExpression("execution(* hello.aop.member.MemberService.*(..))");
         assertThat(pointcut.matches(helloMethod, MemberServiceImpl.class)).isTrue();
     }
-    
 }
