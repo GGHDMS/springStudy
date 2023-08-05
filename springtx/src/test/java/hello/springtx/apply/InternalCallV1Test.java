@@ -11,7 +11,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 @Slf4j
 @SpringBootTest
-public class internalCallV1Test {
+public class InternalCallV1Test {
 
     @Autowired
     CallService callService;
