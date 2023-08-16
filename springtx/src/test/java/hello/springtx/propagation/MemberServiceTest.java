@@ -29,7 +29,6 @@ class MemberServiceTest {
     @Test
     void outerTxOff_success() {
         //given
-
         String username = "outerTxOff_success";
 
         //when
@@ -48,7 +47,6 @@ class MemberServiceTest {
     @Test
     void outerTxOff_fail() {
         //given
-
         String username = "로그예외_outerTxOff_fail";
 
         //when
@@ -58,5 +56,23 @@ class MemberServiceTest {
         //when: 모든 데이터가 정상 저장된다.
         Assertions.assertTrue(memberRepository.find(username).isPresent());
         Assertions.assertTrue(logRepository.find(username).isEmpty());
+    }
+
+    /**
+     * memberService    @Transactional : ON
+     * memberRepository @Transactional : OFF
+     * logRepository    @Transactional : OFF
+     */
+    @Test
+    void singleTx() {
+        //given
+        String username = "outerTxON_success";
+
+        //when
+        memberService.joinV1(username);
+
+        //when: 모든 데이터가 정상 저장된다.
+        Assertions.assertTrue(memberRepository.find(username).isPresent());
+        Assertions.assertTrue(logRepository.find(username).isPresent());
     }
 }
